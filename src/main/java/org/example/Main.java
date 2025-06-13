@@ -39,7 +39,6 @@ public class Main {
 
         templateToEdit = templateToEdit.replace("[CompanyName]", companyName);
 
-
         return templateToEdit;
     }
 
@@ -49,7 +48,6 @@ public class Main {
         System.out.println("enter company name: ");
         String input = scanner.nextLine();
         return replaceSpecialCharacters(input);
-        
     }
 
     private static String enterArticleNumber() {
