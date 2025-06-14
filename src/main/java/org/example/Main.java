@@ -12,20 +12,22 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         System.setProperty("file.encoding", "UTF-8");
-        String companyName = enterCompanyName();
-        System.out.println(companyName);
-        String templateToEdit = fileEditor(companyName);
-        savePdfToDesktop(templateToEdit, companyName);
+        try (Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8)) {
+            String companyName = enterCompanyName(scanner);
+            System.out.println(companyName);
+            String templateToEdit = fileEditor(scanner, companyName);
+            savePdfToDesktop(templateToEdit, companyName);
+        }
     }
 
-    private static String fileEditor(String companyName) {
-        String pathToTemplate = selectTemplate();
+    private static String fileEditor(Scanner scanner, String companyName) {
+        String pathToTemplate = selectTemplate(scanner);
         String templateToEdit = getTemplate(pathToTemplate);
         String date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         templateToEdit = templateToEdit.replace("[Datum]", date);
-        String jobTitle = enterJobTitle();
+        String jobTitle = enterJobTitle(scanner);
         templateToEdit = templateToEdit.replace("[Tjänstens namn]", jobTitle);
-        String articleNumber = enterArticleNumber();
+        String articleNumber = enterArticleNumber(scanner);
 
         if (Objects.equals(articleNumber, "")){
             templateToEdit = templateToEdit.replace("– Annonsnummer [XXXXXX]", articleNumber);
@@ -36,23 +38,19 @@ public class Main {
         return templateToEdit;
     }
 
-    private static String enterCompanyName() {
-        Scanner scanner = new Scanner(System.in, "Cp850");
-        //Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
+    private static String enterCompanyName(Scanner scanner) {
         System.out.println("enter company name: ");
         String input = scanner.nextLine();
         return replaceSpecialCharacters(input);
     }
 
-    private static String enterArticleNumber() {
-        Scanner scanner = new Scanner(System.in, "Cp850");
+    private static String enterArticleNumber(Scanner scanner) {
         System.out.println("enter article number: ");
         String input = scanner.nextLine();
         return replaceSpecialCharacters(input);
     }
 
-    private static String enterJobTitle() {
-        Scanner scanner = new Scanner(System.in, "Cp850");
+    private static String enterJobTitle(Scanner scanner) {
         System.out.println("enter job title: ");
         String input = scanner.nextLine();
         return replaceSpecialCharacters(input);
@@ -64,8 +62,7 @@ public class Main {
                 .replace("ö", "\u00F6");
     }
 
-    private static String selectTemplate() {
-        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
+    private static String selectTemplate(Scanner scanner) {
         while (true) {
             System.out.println("select which CV to print:");
             System.out.println("1. software developer");
@@ -86,7 +83,6 @@ public class Main {
                     return "template";
                 case 9:
                     System.out.println("Exiting...");
-                    scanner.close();
                     System.exit(0);
                     break;
                 default:
