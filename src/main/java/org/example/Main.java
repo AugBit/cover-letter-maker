@@ -18,7 +18,6 @@ public class Main {
         savePdfToDesktop(templateToEdit, companyName);
     }
 
-
     private static String fileEditor(String companyName) {
         String pathToTemplate = selectTemplate();
         String templateToEdit = getTemplate(pathToTemplate);
@@ -27,9 +26,11 @@ public class Main {
         String jobTitle = enterJobTitle();
         templateToEdit = templateToEdit.replace("[Tjänstens namn]", jobTitle);
         String articleNumber = enterArticleNumber();
+
         if (Objects.equals(articleNumber, "")){
             templateToEdit = templateToEdit.replace("– Annonsnummer [XXXXXX]", articleNumber);
         }
+
         templateToEdit = templateToEdit.replace("[XXXXXX]", articleNumber);
         templateToEdit = templateToEdit.replace("[CompanyName]", companyName);
         return templateToEdit;
