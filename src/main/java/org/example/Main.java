@@ -12,11 +12,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         System.setProperty("file.encoding", "UTF-8");
-
         String companyName = enterCompanyName();
         System.out.println(companyName);
         String templateToEdit = fileEditor(companyName);
-
         savePdfToDesktop(templateToEdit, companyName);
     }
 
@@ -24,21 +22,16 @@ public class Main {
     private static String fileEditor(String companyName) {
         String pathToTemplate = selectTemplate();
         String templateToEdit = getTemplate(pathToTemplate);
-
         String date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         templateToEdit = templateToEdit.replace("[Datum]", date);
-
         String jobTitle = enterJobTitle();
         templateToEdit = templateToEdit.replace("[Tjänstens namn]", jobTitle);
-
         String articleNumber = enterArticleNumber();
         if (Objects.equals(articleNumber, "")){
             templateToEdit = templateToEdit.replace("– Annonsnummer [XXXXXX]", articleNumber);
         }
         templateToEdit = templateToEdit.replace("[XXXXXX]", articleNumber);
-
         templateToEdit = templateToEdit.replace("[CompanyName]", companyName);
-
         return templateToEdit;
     }
 
@@ -138,5 +131,4 @@ public class Main {
             e.printStackTrace();
         }
     }
-
 }
