@@ -10,14 +10,24 @@ public class PdfMaker {
 
     public String makePdf(String text, String companyName) {
         try {
-            String userHome = System.getProperty("user.home");
-            String desktopPath = Paths.get(userHome, "Desktop", "August Rydnell Personligt Brev Till " + companyName + ".pdf").toString();
-            PdfWriter writer = new PdfWriter(desktopPath);
+            String os = System.getProperty("os.name").toLowerCase();
+            String desktopPath;
+            if (os.contains("linux") && System.getenv("WSL_DISTRO_NAME") != null) {
+                // Running in WSL
+                desktopPath = "/mnt/c/Users/augus/Desktop";
+            } else {
+                // Running on Windows or other OS
+                String userHome = System.getProperty("user.home");
+                desktopPath = Paths.get(userHome, "Desktop").toString();
+            }
+            String fileName = "August Rydnell Personligt Brev Till " + companyName + ".pdf";
+            String fullPath = Paths.get(desktopPath, fileName).toString();
+            PdfWriter writer = new PdfWriter(fullPath);
             PdfDocument pdfDoc = new PdfDocument(writer);
             Document document = new Document(pdfDoc);
             document.add(new Paragraph(text));
             document.close();
-            return desktopPath;
+            return fullPath;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
