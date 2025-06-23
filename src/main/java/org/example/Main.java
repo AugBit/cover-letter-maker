@@ -91,8 +91,6 @@ public class Main {
         }
     }
 
-    // todo can find the files from jar but not from intellij
-    // todo change coding, cant read å ä ö
     private static String getTemplate(String fileToSelect) {
         try {
             ClassLoader classLoader = Main.class.getClassLoader();
